@@ -17,18 +17,18 @@ export default function Home() {
     }
   };
 
-  const languages = ["C", "C++", "Python", "Java", "JavaScript"];
+  const languages = ["C", "C++", "Python", "Java", "JavaScript", "Matlab"];
 
   return (
-    <div>
+    <div className="text-black">
       {/* Home Section */}
-      <section id="home" className="h-screen flex flex-col justify-center items-center bg-white">
+      <section id="home" className="h-screen flex flex-col justify-center items-center bg-[#CFFFE2]">
         <h1 className="text-4xl font-bold mb-4">Welcome to the Quiz App</h1>
         <p className="mb-6 text-center">Start your journey to mastering knowledge.</p>
       </section>
 
       {/* About Section */}
-      <section id="about" className="h-screen flex flex-col justify-center items-center bg-gray-100">
+      <section id="about" className="h-screen flex flex-col justify-center items-center bg-[#A2D5C6]">
         <h2 className="text-3xl font-semibold mb-4">About Us</h2>
         <p className="max-w-xl text-center">
           We’re here to help students grow through quizzes and learning tools.
@@ -36,18 +36,22 @@ export default function Home() {
       </section>
 
       {/* Study Zone Section */}
-      <section id="study" className="min-h-screen flex flex-col items-center bg-white px-6 py-12">
+      <section id="study" className="min-h-screen flex flex-col justify-center items-center bg-[#88B5A5] px-6 py-12">
         <h2 className="text-3xl font-semibold mb-8">Study Zone</h2>
 
         {/* Language Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl place-items-center">
           {languages.map((lang) => (
             <button
               key={lang}
               onClick={() => setSelectedLang(lang)}
-              className="block p-6 bg-gray-100 rounded-xl shadow-md hover:shadow-lg hover:bg-gray-200 transition duration-300"
+              className="block p-6 bg-white rounded-xl shadow-md hover:shadow-xl  hover:scale-105 hover:-translate-y-1 transition-all duration-300 ease-in-out w-full max-w-xs"
             >
-              <h3 className="text-xl font-semibold">Programming Language - {lang}</h3>
+              <img
+                src={`/${lang.toLowerCase()}.png`}
+                alt={`${lang} logo`}
+                className="h-24 w-auto mx-auto"
+              />
             </button>
           ))}
         </div>
