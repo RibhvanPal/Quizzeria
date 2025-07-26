@@ -1,14 +1,25 @@
 "use client";
 
 import { MouseEvent } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
-  const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
+  const router = useRouter();
+
+  const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string, route: string) => {
     e.preventDefault();
-    const targetId = href.substring(1);
-    const element = document.getElementById(targetId);
+    const targetId = href.startsWith("#") ? href.substring(1) : "";
+    const element = targetId ? document.getElementById(targetId) : null;
+
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      // Smooth scroll with slower duration
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Add custom scroll duration via CSS or JS if needed
+      element.style.scrollBehavior = "smooth";
+    } else {
+      // Navigate to the route if section not found
+      router.push(route);
     }
   };
 
@@ -16,7 +27,9 @@ export default function Navbar() {
     e.preventDefault();
     const element = document.getElementById("home");
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      router.push("/");
     }
   };
 
@@ -26,36 +39,38 @@ export default function Navbar() {
         src="/logo.png"
         alt="Logo"
         onClick={handleLogoClick}
-        className="h-8 w-auto cursor-pointer"
+        className="h-8 w-auto scale-200 cursor-pointer rounded-full transform hover:scale-220 hover:shadow-lg transition-transform duration-200 ease-in-out"
       />
       <div className="flex justify-center flex-1">
         <div className="flex gap-10 text-lg">
-          <a
+          <Link
             href="#home"
-            onClick={(e) => handleNavClick(e, "#home")}
+            onClick={(e) => handleNavClick(e, "#home", "/")}
             className="hover:scale-110 transition-transform duration-200"
           >
             Home
-          </a>
-          <a
+          </Link>
+          <Link
             href="#about"
-            onClick={(e) => handleNavClick(e, "#about")}
+            onClick={(e) => handleNavClick(e, "#about", "/about")}
             className="hover:scale-110 transition-transform duration-200"
           >
             About
-          </a>
-          <a
+          </Link>
+          <Link
             href="#study"
-            onClick={(e) => handleNavClick(e, "#study")}
+            onClick={(e) => handleNavClick(e, "#study", "/study")}
             className="hover:scale-110 transition-transform duration-200"
           >
             Study
-          </a>
+          </Link>
         </div>
       </div>
-      <button className="bg-white text-black px-4 py-2 rounded hover:bg-gray-200">
-        Login
-      </button>
+      <Link href="/login">
+        <button className="bg-white text-black px-4 py-2 rounded hover:bg-gray-200">
+          Login
+        </button>
+      </Link>
     </nav>
   );
 }

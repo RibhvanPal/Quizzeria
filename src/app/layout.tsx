@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <Navbar />
-        <main className="pt-16">{children}</main>
+        <main className="pt-0">{children}</main>
         <Footer />
       </body>
     </html>

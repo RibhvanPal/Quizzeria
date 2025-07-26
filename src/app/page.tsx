@@ -1,14 +1,87 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [selectedLang, setSelectedLang] = useState<string | null>(null);
   const [level, setLevel] = useState("beginner");
   const [goal, setGoal] = useState("college");
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(false);
+  const [isStudyHeaderVisible, setIsStudyHeaderVisible] = useState(false);
+  const [isHeroVisible, setIsHeroVisible] = useState(false);
   const router = useRouter();
+
+  // Scroll to Home section on page reload
+  useEffect(() => {
+    const homeSection = document.getElementById("home");
+    if (homeSection) {
+      homeSection.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
+
+  // Handle modal open/close with smooth transition
+  useEffect(() => {
+    if (selectedLang) {
+      setIsModalOpen(true);
+      document.body.style.overflow = "hidden"; // Disable scrolling
+    } else {
+      setIsModalOpen(false);
+      document.body.style.overflow = "auto"; // Enable scrolling
+    }
+    return () => {
+      document.body.style.overflow = "auto"; // Cleanup on unmount
+    };
+  }, [selectedLang]);
+
+  // Handle About Us header animation on scroll
+  useEffect(() => {
+    const aboutSection = document.getElementById("about");
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeaderVisible(entry.isIntersecting);
+      },
+      { threshold: 0.2 } // Trigger when 10% of section is visible
+    );
+
+    if (aboutSection) {
+      observer.observe(aboutSection);
+    }
+
+    return () => {
+      if (aboutSection) {
+        observer.unobserve(aboutSection);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsHeroVisible(true);
+    }, 100); // 100ms delay
+  }, []);
+
+  // Handle Quiz Zone header animation on scroll
+  useEffect(() => {
+    const studySection = document.getElementById("study");
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsStudyHeaderVisible(entry.isIntersecting);
+      },
+      { threshold: 0.2 } // Trigger when 20% of section is visible
+    );
+
+    if (studySection) {
+      observer.observe(studySection);
+    }
+
+    return () => {
+      if (studySection) {
+        observer.unobserve(studySection);
+      }
+    };
+  }, []);
 
   const handleSubmit = () => {
     if (selectedLang) {
@@ -17,27 +90,126 @@ export default function Home() {
     }
   };
 
+  // Close modal when clicking outside
+  const handleOutsideClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      setSelectedLang(null);
+    }
+  };
+
   const languages = ["C", "C++", "Python", "Java", "JavaScript", "Matlab"];
 
   return (
     <div className="text-black">
       {/* Home Section */}
-      <section id="home" className="h-screen flex flex-col justify-center items-center bg-[#CFFFE2]">
-        <h1 className="text-4xl font-bold mb-4">Welcome to the Quiz App</h1>
-        <p className="mb-6 text-center">Start your journey to mastering knowledge.</p>
+      <section id="home" className="h-screen flex flex-row justify-center items-center bg-[#CFFFE2] px-6">
+        {/* Left Side (Text Content) */}
+        <div className="flex-1 flex flex-col justify-center items-start px-8">
+          <h1
+            className={`text-6xl font-bold mb-8 max-w-2xl text-left transition-transform duration-700 ease-in-out ${
+              isHeroVisible ? "translate-x-0" : "-translate-x-full"
+            }`}
+          >
+            Level Up Your Programming Skills with AI-Powered Quizzes
+          </h1>
+          <p className="mb-6 text-2xl font-semibold text-green-900 max-w-xl text-left">
+            Practice coding skills with tailored quizzes for C, Python, Java, and more!
+          </p>
+          <button
+            onClick={() =>
+              document.getElementById("study")?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="bg-[#0b9614] text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-all duration-200"
+          >
+            Start Learning
+          </button>
+        </div>
+
+        {/* Right Side (Logo + Horizontal Images Layout) */}
+        <div className="flex-1 flex flex-col justify-center items-center mt-[-40px] gap-6">
+          {/* Logo */}
+          <img
+            src="logo.png"
+            alt="Quiz App Hero"
+            className="h-60 w-60 rounded-full object-cover bg-transparent shadow-xl mb-4"
+          />
+
+          {/* Animated Images */}
+          <div
+            className={`flex flex-col items-center gap-4 transition-transform duration-700 ease-in-out ${
+              isHeroVisible ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            {/* First Row: Image 1 & Image 2 */}
+            <div className="flex flex-row gap-4">
+              <img
+                src="img1.png"
+                alt="Image 1"
+                className="h-24 w-40 rounded-xl shadow-lg object-cover opacity-80"
+              />
+              <img
+                src="img2.jpg"
+                alt="Image 2"
+                className="h-36 w-52 rounded-xl shadow-lg object-cover opacity-80"
+              />
+            </div>
+
+            {/* Second Row: Image 3 centered */}
+            <img
+              src="img3.png"
+              alt="Image 3"
+              className="h-36 w-52 rounded-xl shadow-lg object-cover opacity-80 mt-2"
+            />
+          </div>
+        </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="h-screen flex flex-col justify-center items-center bg-[#A2D5C6]">
-        <h2 className="text-3xl font-semibold mb-4">About Us</h2>
-        <p className="max-w-xl text-center">
-          We’re here to help students grow through quizzes and learning tools.
-        </p>
+      <section id="about" className="h-screen flex flex-col justify-center items-center bg-[#A2D5C6] px-6">
+        <div
+          className={`text-2xl bg-green-500 px-4 py-2 rounded-4xl font-semibold mb-8 text-center transition-transform duration-700 ease-in-out ${
+            isHeaderVisible ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          About Us
+        </div>
+        <div className="flex flex-row gap-6 max-w-5xl w-full justify-center">
+          {/* Creator Card 1 */}
+          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center max-w-xs w-full hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out">
+            <img
+              src="ribhvan.jpg"
+              alt="Creator 1"
+              className="h-32 w-32 rounded-full mb-4 object-cover"
+            />
+            <h3 className="text-xl font-semibold mb-2">Ribhvan Pal</h3>
+            <p className="text-center text-gray-600">
+              Ribhvan is a third-year student at IEM, Kolkata, with a passion for web development and a keen interest in exploring the realms of AI/ML and generative AI. Dedicated to creating user-friendly and innovative web experiences, Ribhvan is driving the development of this Quiz App to empower students in mastering programming.
+            </p>
+          </div>
+          {/* Creator Card 2 */}
+          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center max-w-xs w-full hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out">
+            <img
+              src="ankan.jpg"
+              alt="Creator 2"
+              className="h-32 w-32 rounded-full mb-4 object-cover"
+            />
+            <h3 className="text-xl font-semibold mb-2">Ankan Paul</h3>
+            <p className="text-center text-gray-600">
+              Ankan is a third-year student at IEM, Kolkata, deeply passionate about AI/ML, generative AI, and web development. With a focus on building productive and innovative solutions, Ankan contributes to this Quiz App by crafting engaging tools to help students excel in coding and achieve their academic and career goals.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* Study Zone Section */}
-      <section id="study" className="min-h-screen flex flex-col justify-center items-center bg-[#88B5A5] px-6 py-12">
-        <h2 className="text-3xl font-semibold mb-8">Study Zone</h2>
+      <section id="study" className="min-h-screen flex flex-col justify-start items-center bg-[#88B5A5] py-6 pt-24">
+        <div
+          className={`text-2xl bg-black text-green-300 px-4 py-2 rounded-4xl font-semibold mb-8 text-center transition-transform duration-700 ease-in-out ${
+            isStudyHeaderVisible ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          Quiz Zone
+        </div>
 
         {/* Language Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl place-items-center">
@@ -45,12 +217,12 @@ export default function Home() {
             <button
               key={lang}
               onClick={() => setSelectedLang(lang)}
-              className="block p-6 bg-white rounded-xl shadow-md hover:shadow-xl  hover:scale-105 hover:-translate-y-1 transition-all duration-300 ease-in-out w-full max-w-xs"
+              className="block p-6 bg-white rounded-xl shadow-md hover:shadow-xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 ease-in-out w-full max-w-xs"
             >
               <img
                 src={`/${lang.toLowerCase()}.png`}
                 alt={`${lang} logo`}
-                className="h-24 w-auto mx-auto"
+                className="h-24 w-auto mx-auto transform hover:scale-110 transition-transform duration-200 ease-in-out"
               />
             </button>
           ))}
@@ -58,23 +230,30 @@ export default function Home() {
 
         {/* Modal Form */}
         {selectedLang && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full relative">
+          <div
+            className="fixed inset-0 flex justify-center items-center z-50"
+            onClick={handleOutsideClick}
+          >
+            <div
+              className={`bg-[#cae3cc] p-8 rounded-2xl shadow-2xl max-w-md w-full relative transform transition-all duration-300 ease-in-out ${
+                isModalOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              }`}
+            >
               <button
-                className="absolute top-2 right-3 text-gray-500 text-xl"
+                className="absolute top-3 right-3 text-gray-500 text-xl hover:text-gray-700 transition-colors duration-200"
                 onClick={() => setSelectedLang(null)}
               >
                 ×
               </button>
-              <h3 className="text-2xl font-bold mb-4">
-                {selectedLang} – Choose Your Preferences
+              <h3 className="text-2xl font-bold mb-6 text-center text-gray-800">
+                {selectedLang}
               </h3>
 
               {/* Level Input */}
-              <div className="mb-4">
-                <label className="block mb-1 font-medium">Select Level:</label>
+              <div className="mb-6">
+                <label className="block mb-2 font-medium text-gray-700">Select Level:</label>
                 <select
-                  className="w-full border rounded px-3 py-2"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
                   value={level}
                   onChange={(e) => setLevel(e.target.value)}
                 >
@@ -85,10 +264,10 @@ export default function Home() {
               </div>
 
               {/* Goal Input */}
-              <div className="mb-4">
-                <label className="block mb-1 font-medium">Your Goal:</label>
+              <div className="mb-8">
+                <label className="block mb-2 font-medium text-gray-700">Your Goal:</label>
                 <select
-                  className="w-full border rounded px-3 py-2"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
                   value={goal}
                   onChange={(e) => setGoal(e.target.value)}
                 >
@@ -97,12 +276,15 @@ export default function Home() {
                 </select>
               </div>
 
-              <button
-                onClick={handleSubmit}
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-              >
-                Submit
-              </button>
+              {/* Submit Button */}
+              <div className="flex justify-center">
+                <button
+                  onClick={handleSubmit}
+                  className="bg-[#0b9614] text-white px-6 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
+                >
+                  Submit
+                </button>
+              </div>
             </div>
           </div>
         )}
