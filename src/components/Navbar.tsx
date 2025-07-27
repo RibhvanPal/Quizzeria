@@ -3,9 +3,11 @@
 import { MouseEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Navbar() {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string, route: string) => {
     e.preventDefault();
@@ -13,12 +15,9 @@ export default function Navbar() {
     const element = targetId ? document.getElementById(targetId) : null;
 
     if (element) {
-      // Smooth scroll with slower duration
       element.scrollIntoView({ behavior: "smooth", block: "start" });
-      // Add custom scroll duration via CSS or JS if needed
       element.style.scrollBehavior = "smooth";
     } else {
-      // Navigate to the route if section not found
       router.push(route);
     }
   };
@@ -39,7 +38,7 @@ export default function Navbar() {
         src="/logo.png"
         alt="Logo"
         onClick={handleLogoClick}
-        className="h-8 w-auto scale-200 cursor-pointer rounded-full transform hover:scale-220 hover:shadow-lg transition-transform duration-200 ease-in-out"
+        className="h-8 w-auto scale-200 cursor-pointer rounded-full transform hover:shadow-lg transition-transform duration-200 ease-in-out"
       />
       <div className="flex justify-center flex-1">
         <div className="flex gap-10 text-lg">
@@ -66,11 +65,31 @@ export default function Navbar() {
           </Link>
         </div>
       </div>
-      <Link href="/login">
-        <button className="bg-white text-black px-4 py-2 rounded hover:bg-gray-200">
-          Login
-        </button>
-      </Link>
+      <div className="flex items-center gap-4">
+        {session ? (
+          <>
+            <Link
+              href="/profile"
+              className="hover:scale-110 transition-transform duration-200"
+            >
+              Profile
+            </Link>
+            <button
+              onClick={() => signOut()}
+              className="bg-white text-black px-4 py-2 rounded hover:bg-gray-200"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={() => signIn("google")}
+            className="bg-white text-black px-4 py-2 rounded hover:bg-gray-200"
+          >
+            Login
+          </button>
+        )}
+      </div>
     </nav>
   );
 }
