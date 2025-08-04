@@ -39,11 +39,6 @@ It then fetches 10 customized questions from the **Gemini API** and displays the
 - Clean landing interface with a strong call-to-action
 - Quickly leads users to quiz categories
 
-### ℹ️ About Section
-
-- Introduces the creators with:
-  - Profile photos
-  - Names and brief bios
 
 ### 📘 Study Workflow
 
@@ -75,8 +70,7 @@ It then fetches 10 customized questions from the **Gemini API** and displays the
 ## 🏗️ App Structure
 
 ### 📌 Homepage
-- **Home**: Landing page with a brief description
-- **About**: Creator bios 
+- **Home**: Landing page with a brief description 
 - **Study**: Programming language list → prompts for level + goal → redirects to quiz
 
 ### 📌 Quiz Page
@@ -135,11 +129,10 @@ npm install
 Create a `.env.local` file inside the `client` directory:
 
 ```env
-REACT_APP_GEMINI_API_KEY=your_gemini_api_key
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_nextauth_secret
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
+GEMINI_API_KEY=
+AUTH_SECRET="" 
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET=
 ```
 
 #### 4. Start the App
