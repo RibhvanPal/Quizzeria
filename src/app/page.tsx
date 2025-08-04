@@ -126,7 +126,7 @@ export default function Home() {
         </div>
 
         {/* Right Side (Logo + Horizontal Images Layout) */}
-        <div className="flex-1 flex flex-col justify-center items-center mt-[-40px] gap-6">
+        <div className="flex-1 flex flex-col justify-center items-center mt-[80px] gap-6">
           {/* Logo */}
           <img
             src="logo.png"
@@ -145,7 +145,7 @@ export default function Home() {
               <img
                 src="img1.png"
                 alt="Image 1"
-                className="h-24 w-40 rounded-xl shadow-lg object-cover opacity-80"
+                className="h-36 w-52 rounded-xl shadow-lg object-cover opacity-80"
               />
               <img
                 src="img2.jpg"
@@ -172,33 +172,10 @@ export default function Home() {
           }`}
         >
           About Us
+          
         </div>
-        <div className="flex flex-row gap-6 max-w-5xl w-full justify-center">
-          {/* Creator Card 1 */}
-          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center max-w-xs w-full hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out">
-            <img
-              src="ribhvan.jpg"
-              alt="Creator 1"
-              className="h-32 w-32 rounded-full mb-4 object-cover"
-            />
-            <h3 className="text-xl font-semibold mb-2">Ribhvan Pal</h3>
-            <p className="text-center text-gray-600">
-              Ribhvan is a third-year student at IEM, Kolkata, with a passion for web development and a keen interest in exploring the realms of AI/ML and generative AI. Dedicated to creating user-friendly and innovative web experiences, Ribhvan is driving the development of this Quiz App to empower students in mastering programming.
-            </p>
-          </div>
-          {/* Creator Card 2 */}
-          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center max-w-xs w-full hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out">
-            <img
-              src="ankan.jpg"
-              alt="Creator 2"
-              className="h-32 w-32 rounded-full mb-4 object-cover"
-            />
-            <h3 className="text-xl font-semibold mb-2">Ankan Paul</h3>
-            <p className="text-center text-gray-600">
-              Ankan is a third-year student at IEM, Kolkata, deeply passionate about AI/ML, generative AI, and web development. With a focus on building productive and innovative solutions, Ankan contributes to this Quiz App by crafting engaging tools to help students excel in coding and achieve their academic and career goals.
-            </p>
-          </div>
-        </div>
+
+        <div className="bg-transparent text-base max-w-[800px] text-justify">Quizzeria is an interactive quiz app built with Next.js and Tailwind CSS, designed to help users practice and improve their programming skills through AI-generated quizzes. With support for multiple programming languages, levels, and goals, it’s ideal for students and job seekers alike.</div>
       </section>
 
       {/* Study Zone Section */}
